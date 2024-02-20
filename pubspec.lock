@@ -25,24 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  battery_plus:
-    dependency: "direct overridden"
-    description:
-      path: "packages/battery_plus/battery_plus"
-      ref: HEAD
-      resolved-ref: "9e7612833f521cb60037d8ca9058ef64ea2f0c7d"
-      url: "https://github.com/aakash-pamnani/plus_plugins"
-    source: git
-    version: "3.0.2"
-  battery_plus_platform_interface:
-    dependency: "direct overridden"
-    description:
-      path: "packages/battery_plus/battery_plus_platform_interface"
-      ref: HEAD
-      resolved-ref: "9e7612833f521cb60037d8ca9058ef64ea2f0c7d"
-      url: "https://github.com/aakash-pamnani/plus_plugins"
-    source: git
-    version: "1.2.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -91,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.8"
   fake_async:
     dependency: transitive
     description:
@@ -136,24 +110,35 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      sha256: "950e77c2bbe1692bc0874fc7fb491b96a4dc340457f4ea1641443d0a6c1ea360"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.15"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_plugins:
+  home_widget:
+    dependency: "direct main"
+    description:
+      name: home_widget
+      sha256: c58a9e6d3b94490f1a8d5ddcbeeeeebc79abd0befe5889c26b0713fb09be6857
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  http_parser:
     dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
+    description:
+      name: http_parser
+      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.2"
   image:
     dependency: transitive
     description:
@@ -162,14 +147,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -186,46 +163,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-  local_auth:
-    dependency: "direct main"
-    description:
-      name: local_auth
-      sha256: "0cf238be2bfa51a6c9e7e9cfc11c05ea39f2a3a4d3e5bb255d0ebc917da24401"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.6"
-  local_auth_android:
-    dependency: transitive
-    description:
-      name: local_auth_android
-      sha256: "36a78898198386d36d4e152b8cb46059b18f0e2017f813a0e833e216199f8950"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.32"
-  local_auth_ios:
-    dependency: transitive
-    description:
-      name: local_auth_ios
-      sha256: edc2977c5145492f3451db9507a2f2f284ee4f408950b3e16670838726761940
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.3"
-  local_auth_platform_interface:
-    dependency: transitive
-    description:
-      name: local_auth_platform_interface
-      sha256: "9e160d59ef0743e35f1b50f4fb84dc64f55676b1b8071e319ef35e7f3bc13367"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.7"
-  local_auth_windows:
-    dependency: transitive
-    description:
-      name: local_auth_windows
-      sha256: "5af808e108c445d0cf702a8c5f8242f1363b7970320334f82e6e1e8ad0b0d7d4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.9"
   matcher:
     dependency: transitive
     description:
@@ -259,13 +196,13 @@ packages:
     source: hosted
     version: "1.8.3"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
-      sha256: "909b84830485dbcd0308edf6f7368bc8fd76afa26a270420f34cabea2a6467a0"
+      sha256: b27217933eeeba8ff24845c34003b003b2b22151de3c908d0e679e8fe1aa078b
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   path_provider_android:
     dependency: transitive
     description:
@@ -278,10 +215,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: "1b744d3d774e5a879bb76d6cd1ecee2ba2c6960c03b1020cd35212f6aa267ac5"
+      sha256: "5a7999be66e000916500be4f15a3633ebceb8302719b47b9cc49ce924125350f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.2"
   path_provider_linux:
     dependency: transitive
     description:
@@ -338,14 +275,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
-  scrollable_positioned_list:
-    dependency: "direct main"
-    description:
-      name: scrollable_positioned_list
-      sha256: "1b54d5f1329a1e263269abc9e2543d90806131aa14fe7c6062a8054d57249287"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.8"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -407,14 +336,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
-  upower:
-    dependency: transitive
-    description:
-      name: upower
-      sha256: cf042403154751180affa1d15614db7fa50234bc2373cd21c3db666c38543ebf
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   vector_math:
     dependency: transitive
     description:
