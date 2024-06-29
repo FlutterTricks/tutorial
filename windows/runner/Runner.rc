@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "upi_qr_code" "\0"
+            VALUE "FileDescription", "upi_quick_qr" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "upi_qr_code" "\0"
+            VALUE "InternalName", "upi_quick_qr" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "upi_qr_code.exe" "\0"
-            VALUE "ProductName", "upi_qr_code" "\0"
+            VALUE "OriginalFilename", "upi_quick_qr.exe" "\0"
+            VALUE "ProductName", "upi_quick_qr" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

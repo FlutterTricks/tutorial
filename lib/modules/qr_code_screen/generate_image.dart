@@ -3,9 +3,32 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_editor/image_editor.dart';
+import 'package:media_store_plus/media_store_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:upi_qr_code/core/constants/constants.dart';
+import 'package:upi_quick_qr/core/constants/constants.dart';
+
+
+Future<String?> saveImage(Map<String, dynamic> message) async {
+  String upiId = message['upiId'];
+  String? name = message['name'];
+  String? amount = message['amount'];
+  Uint8List? result = message['result'];
+  String path =
+      '${(await getTemporaryDirectory()).path} /${upiId}_${name ?? "-"}_${amount ?? 0}.png';
+  File file = File(path);
+  await file.create(recursive: true);
+
+  file.writeAsBytesSync(result!);
+
+  final saveInfo = await MediaStore().saveFile(
+    tempFilePath: file.path,
+    dirType: DirType.photo,
+    dirName: DirType.photo.defaults,
+    relativePath: "UPI Quick QR",
+  );
+  return saveInfo!.uri.toString();
+}
 
 class ImageUtil {
   static String fontName = "";
@@ -27,14 +50,16 @@ class ImageUtil {
       String data, String? name, String? amount, String upiId) async {
     final result = await generateImage(data, name, amount, upiId);
 
-    String path =
-        'storage/emulated/0/Pictures/Upi Qr Code/${upiId}_${name ?? "-"}_${amount ?? 0}.png';
-    File file = File(path);
-    await file.create(recursive: true);
+    // return await compute<Map<String, dynamic>, String?>(
+    return saveImage({
+      'upiId': upiId,
+      'name': name,
+      'amount': amount,
+      'result': result,
+    });
+    // );
 
-    file.writeAsBytesSync(result!);
-
-    return path;
+    // return path;
   }
 
   Future<Uint8List?> shareImage(

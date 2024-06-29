@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:upi_qr_code/core/extensions/extensions.dart';
-import 'package:upi_qr_code/core/widgets/custom_text_form_field.dart';
-import 'package:upi_qr_code/modules/home_screen/presentation/cubit/home_screen_cubit.dart';
-import 'package:upi_qr_code/modules/qr_code_screen/presentation/qr_code_screen.dart';
+import 'package:upi_quick_qr/core/extensions/extensions.dart';
+import 'package:upi_quick_qr/core/widgets/custom_text_form_field.dart';
+import 'package:upi_quick_qr/modules/home_screen/presentation/cubit/home_screen_cubit.dart';
+import 'package:upi_quick_qr/modules/qr_code_screen/presentation/qr_code_screen.dart';
 
 class NewQrScreen extends StatefulWidget {
   const NewQrScreen({
@@ -35,7 +35,7 @@ class _NewQrScreenState extends State<NewQrScreen> {
     amount = TextEditingController();
     name = TextEditingController();
     upiId = TextEditingController();
-    amount.text = (widget.amount ?? 0).toString();
+    amount.text = (widget.amount ?? "").toString();
     name.text = widget.name ?? "";
     upiId.text = widget.upiId ?? "";
     super.initState();
@@ -48,7 +48,7 @@ class _NewQrScreenState extends State<NewQrScreen> {
         if (state.index == 1) {
           upiId.text = state.upiId ?? "";
           name.text = state.name ?? "";
-          amount.text = state.amount.toString();
+          amount.text = (state.amount ?? "").toString();
         }
       },
       child: Form(
@@ -90,7 +90,7 @@ class _NewQrScreenState extends State<NewQrScreen> {
                 controller: name,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Enter Name',
+                  labelText: 'Enter Name (optional)',
                   prefixIcon: Icon(
                     Icons.person,
                   ),
@@ -109,7 +109,7 @@ class _NewQrScreenState extends State<NewQrScreen> {
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Enter Amount',
+                  labelText: 'Enter Amount (optional)',
                   prefixIcon: Icon(
                     IconData(0x20B9, fontFamily: 'MaterialIcons'),
                   ),
@@ -130,11 +130,14 @@ class _NewQrScreenState extends State<NewQrScreen> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      context
+                          .read<HomeScreenCubit>()
+                          .setData(upiId.text, name.text, amount.text);
                       context.push(
                         QrCodeScreen(
                           name: name.text,
                           upiId: upiId.text,
-                          amount: double.tryParse(amount.text),
+                          amount: double.tryParse(amount.text) ?? 0,
                         ),
                       );
                     }

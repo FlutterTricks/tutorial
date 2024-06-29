@@ -1,14 +1,12 @@
 import 'package:android_intent_plus/android_intent.dart';
-import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:media_scanner/media_scanner.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:media_scanner/media_scanner.dart';
+// import 'package:open_file/open_file.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:upi_qr_code/core/extensions/extensions.dart';
-import 'package:upi_qr_code/modules/qr_code_screen/generate_image.dart';
-import 'package:upi_qr_code/modules/qr_code_screen/presentation/cubit/qr_code_screen_cubit.dart';
+import 'package:upi_quick_qr/core/extensions/extensions.dart';
+import 'package:upi_quick_qr/modules/qr_code_screen/generate_image.dart';
+import 'package:upi_quick_qr/modules/qr_code_screen/presentation/cubit/qr_code_screen_cubit.dart';
 
 class QrCodeScreen extends StatefulWidget {
   const QrCodeScreen({super.key, this.name, required this.upiId, this.amount});
@@ -38,7 +36,8 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     String data =
         "upi://pay?pa=${widget.upiId}&pn=${widget.name}&am=$amount&cu=INR";
     return BlocProvider<QrCodeScreenCubit>(
-      create: (context) => QrCodeScreenCubit(ImageUtil()),
+      create: (context) => QrCodeScreenCubit(ImageUtil())
+        ..saveInHistory(widget.upiId, widget.name, amount),
       child: BlocConsumer<QrCodeScreenCubit, QrCodeScreenState>(
         listener: (context, state) {
           if (state.status == QrCodeScreenStateStatus.loading) {
@@ -59,8 +58,17 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 action: SnackBarAction(
                   label: "Open",
                   onPressed: () async {
-                    MediaScanner.loadMedia(path: state.filePath!);
-                    OpenFile.open(state.filePath).then((result) {});
+                    AndroidIntent intent = AndroidIntent(
+                      action: 'action_view',
+                      data: state.filePath,
+                      type: 'image/*',
+                    );
+                    intent.launch();
+                    // OpenFile.open(state.filePath).then((result) {
+                    //   if (kDebugMode) {
+                    //     print(result.message);
+                    //   }
+                    // });
                   },
                 ),
               ),

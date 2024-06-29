@@ -83,10 +83,5 @@ InputDecorationTheme get inputDecorationTheme {
 }
 
 TextTheme get textTheme {
-  return const TextTheme(
-    labelMedium: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-    ),
-  );
+  return const TextTheme();
 }

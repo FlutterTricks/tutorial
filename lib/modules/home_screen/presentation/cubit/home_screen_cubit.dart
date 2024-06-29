@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:upi_qr_code/core/extensions/build_context_extension.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:upi_quick_qr/core/extensions/build_context_extension.dart';
 import 'package:vibration/vibration.dart';
 
 part 'home_screen_state.dart';
@@ -12,9 +12,8 @@ part 'home_screen_cubit.freezed.dart';
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit() : super(const HomeScreenState(index: 1));
 
-  Future<void> scanQr(BuildContext context, Barcode scanData,
-      QRViewController controller) async {
-    final uri = Uri.tryParse(scanData.code!);
+  Future<void> scanQr(BuildContext context, Barcode scanData) async {
+    final uri = Uri.tryParse(scanData.rawValue!);
 
     if (uri?.scheme == 'upi') {
       final upiId = uri!.queryParameters['pa'];
@@ -38,7 +37,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
     } else {
       context.showErrorSnackBar(
-        scanData.code!.contains('upi://')
+        scanData.rawValue!.contains('upi://')
             ? const Text('Please Scan valid QR Code')
             : const Text('Please Scan UPI QR Code'),
         behavior: SnackBarBehavior.floating,
@@ -62,4 +61,16 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   void setIndex(int value) {
     emit(state.copyWith(index: value));
   }
+
+  void setData(String? upiId, String? name, String? amount) {
+    emit(
+      state.copyWith(
+        upiId: upiId,
+        name: name,
+        amount: double.tryParse(amount ?? "0") ?? 0,
+        index: 1,
+      ),
+    );
+  }
+
 }

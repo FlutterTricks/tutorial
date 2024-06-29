@@ -1,4 +1,4 @@
-# upi_qr_code
+# upi_quick_qr
 
 A new Flutter project.
 

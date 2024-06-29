@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:upi_qr_code/core/theme/app_theme.dart';
+import 'package:upi_quick_qr/core/theme/app_theme.dart';
 
 class AppTheme {
   static ThemeData getTheme(

@@ -1,4 +1,4 @@
-package `in`.aakashpamnani.upiquickqr
+package `in`.aakashpamnani.upi_qr_code
 
 import io.flutter.embedding.android.FlutterActivity
 

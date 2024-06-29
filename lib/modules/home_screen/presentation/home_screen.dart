@@ -1,10 +1,12 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:upi_qr_code/core/extensions/color_extension.dart';
-import 'package:upi_qr_code/modules/home_screen/presentation/cubit/home_screen_cubit.dart';
-import 'package:upi_qr_code/modules/new_qr_code_screen/presentation/new_qr_screen.dart';
-import 'package:upi_qr_code/modules/qr_code_scanner_screen/presentation/qr_code_scanner_screen.dart';
+import 'package:upi_quick_qr/core/extensions/color_extension.dart';
+import 'package:upi_quick_qr/modules/history_screen/presentation/history_screen.dart';
+import 'package:upi_quick_qr/modules/home_screen/presentation/cubit/home_screen_cubit.dart';
+import 'package:upi_quick_qr/modules/new_qr_code_screen/presentation/new_qr_screen.dart';
+import 'package:upi_quick_qr/modules/qr_code_scanner_screen/presentation/qr_code_scanner_screen.dart';
+import 'package:upi_quick_qr/modules/settings_screen/presentation/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late PageController pageController;
+  bool isAnimating = false;
 
   @override
   void initState() {
@@ -25,39 +28,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeScreenCubit, HomeScreenState>(
       listener: (context, state) {
-        // pageController.animateToPage(state.index,
-        //     duration: const Duration(milliseconds: 500), curve: Curves.ease);
+        isAnimating = true;
+        pageController
+            .animateToPage(state.index,
+                duration: const Duration(milliseconds: 500), curve: Curves.ease)
+            .then((value) {
+          isAnimating = false;
+        });
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: context.colorScheme.primaryFixedDim,
           appBar: AppBar(
             toolbarHeight: kToolbarHeight + 100,
             flexibleSpace: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  context.primaryContainer,
-                  context.primary,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )),
+                gradient: LinearGradient(
+                  colors: [
+                    context.secondaryContainer,
+                    context.colorScheme.primaryFixedDim,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
             ),
             centerTitle: true,
             title: const Text('UPI QR Code Generator'),
           ),
-          drawer: const Drawer(),
           extendBody: true,
           bottomNavigationBar: DotNavigationBar(
             currentIndex: state.index,
             onTap: (int index) {
-              pageController.animateToPage(index,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease);
+              if (!isAnimating) {
+                context.read<HomeScreenCubit>().setIndex(index);
+              }
             },
             dotIndicatorColor: Colors.black,
             enableFloatingNavBar: true,
@@ -83,9 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           body: Container(
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: context.colorScheme.surface,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0),
               ),
@@ -93,7 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: PageView(
               controller: pageController,
               onPageChanged: (value) {
-                context.read<HomeScreenCubit>().setIndex(value);
+                if (!isAnimating) {
+                  context.read<HomeScreenCubit>().setIndex(value);
+                }
               },
               children: [
                 const QrCodeScannerScreen(),
@@ -102,8 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   name: state.name,
                   amount: state.amount,
                 ),
-                const Placeholder(),
-                Container(),
+                const HistoryScreen(),
+                const SettingsScreen(),
               ],
             ),
           ),
