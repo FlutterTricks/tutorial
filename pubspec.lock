@@ -25,24 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  battery_plus:
-    dependency: "direct overridden"
-    description:
-      path: "packages/battery_plus/battery_plus"
-      ref: HEAD
-      resolved-ref: "9e7612833f521cb60037d8ca9058ef64ea2f0c7d"
-      url: "https://github.com/aakash-pamnani/plus_plugins"
-    source: git
-    version: "3.0.2"
-  battery_plus_platform_interface:
-    dependency: "direct overridden"
-    description:
-      path: "packages/battery_plus/battery_plus_platform_interface"
-      ref: HEAD
-      resolved-ref: "9e7612833f521cb60037d8ca9058ef64ea2f0c7d"
-      url: "https://github.com/aakash-pamnani/plus_plugins"
-    source: git
-    version: "1.2.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -91,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.8"
   fake_async:
     dependency: transitive
     description:
@@ -146,11 +120,6 @@ packages:
     version: "2.0.15"
   flutter_test:
     dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -407,14 +376,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
-  upower:
-    dependency: transitive
-    description:
-      name: upower
-      sha256: cf042403154751180affa1d15614db7fa50234bc2373cd21c3db666c38543ebf
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   vector_math:
     dependency: transitive
     description:
