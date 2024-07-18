@@ -4,30 +4,18 @@ import 'package:flutter/material.dart';
 class LiquidLoading extends StatefulWidget {
   final Duration loadDuration;
   final Duration waveDuration;
-  final double boxHeight;
-  final double boxWidth;
-  final Color boxBackgroundColor;
   final Color waveColor;
-
-  /// Specifies the load limit: (0, 1.0].  This may be used to limit the liquid
-  /// fill effect to less than 100%.
-  ///
-  /// By default, the animation will load to 1.0 (100%).
   final double loadUntil;
 
   const LiquidLoading({
     Key? key,
     this.loadDuration = const Duration(seconds: 6),
     this.waveDuration = const Duration(seconds: 2),
-    this.boxHeight = 250,
-    this.boxWidth = 400,
-    this.boxBackgroundColor = Colors.black,
     this.waveColor = Colors.blueAccent,
     this.loadUntil = 1.0,
-  })  : assert(loadUntil > 0 && loadUntil <= 1.0),
+  })  : assert(loadUntil >= 0 && loadUntil <= 1.0),
         super(key: key);
 
-  /// Creates the mutable state for this widget. See [StatefulWidget.createState].
   @override
   _LiquidLoadingState createState() => _LiquidLoadingState();
 }
@@ -52,20 +40,33 @@ class _LiquidLoadingState extends State<LiquidLoading>
       duration: widget.loadDuration,
     );
     _loadValue = Tween<double>(
-      begin: 0.0,
-      end: 10,
+      begin: 0,
+      end: widget.loadUntil,
     ).animate(_loadController);
-    if (1.0 == widget.loadUntil) {
-      _loadValue.addStatusListener((status) {
-        if (AnimationStatus.completed == status) {
-          // Stop the repeating wave when the load has completed to 100%
-          _waveController.stop();
-        }
-      });
-    }
 
-    _waveController.repeat();
+    _loadValue.addStatusListener((status) {
+      if (AnimationStatus.completed == status && _loadValue.value == 1) {
+        _waveController.stop();
+      }
+      if (AnimationStatus.forward == status) {
+        _waveController.repeat();
+      }
+    });
+
     _loadController.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant LiquidLoading oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.loadUntil != widget.loadUntil) {
+      _loadValue = Tween<double>(
+        begin: _loadValue.value,
+        end: widget.loadUntil,
+      ).animate(_loadController);
+      _loadController.reset();
+      _loadController.forward();
+    }
   }
 
   @override
@@ -77,18 +78,32 @@ class _LiquidLoadingState extends State<LiquidLoading>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.boxHeight,
-      width: widget.boxWidth,
+    return SizedBox.expand(
       child: AnimatedBuilder(
-        animation: _waveController,
+        animation: Listenable.merge([_loadController, _waveController]),
         builder: (BuildContext context, Widget? child) {
-          return CustomPaint(
-            painter: _WavePainter(
-              waveValue: _waveController.value,
-              loadValue: _loadValue.value,
-              waveColor: widget.waveColor,
-            ),
+          return Stack(
+            children: [
+              SizedBox.expand(
+                child: CustomPaint(
+                  painter: _WavePainter(
+                    waveValue: _waveController.value,
+                    loadValue: _loadValue.value,
+                    waveColor: widget.waveColor,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "${(_loadValue.value * 100).toStringAsFixed(0)}%",
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.black.withOpacity(0.5),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
           );
         },
       ),
@@ -110,24 +125,33 @@ class _WavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double baseHeight = -10 * loadValue;
-    final width = size.width;
-    final height = size.height;
+    final width = size.width; //width of canvas
+    final height = size.height; // height of canvas
+    double baseHeight = height * loadValue; // height of progress
     final path = Path();
-    path.moveTo(0.0, 0);
-    for (var i = 0.0; i < width; i++) {
-      path.lineTo(i, baseHeight + sin(_pi2 * (i / width + waveValue)) * 8);
+
+    path.moveTo(0.0, height);
+    if (loadValue != 1) {
+      for (var i = 0.0; i <= width; i++) {
+        path.lineTo(
+            i, height - baseHeight + sin(_pi2 * (i / width + waveValue)) * 8);
+      }
     }
 
     path.lineTo(width, height);
-    path.lineTo(0.0, height);
+    if (loadValue == 1) {
+      path.lineTo(width, 0);
+      path.lineTo(0, 0);
+    }
+
     path.close();
     final wavePaint = Paint()..color = waveColor;
     canvas.drawPath(path, wavePaint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(_WavePainter oldDelegate) {
+    return oldDelegate.waveValue != waveValue ||
+        oldDelegate.loadValue != loadValue;
   }
 }
