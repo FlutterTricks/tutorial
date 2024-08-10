@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:settings/watch.dart';
-import 'package:settings/watch_screen.dart';
 
 void main() async {
   runApp(const MyApp());
